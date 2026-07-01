@@ -1,0 +1,7 @@
+flask
+requests
+beautifulsoup4
+pandas
+python-dotenv
+pytest
+flake8
