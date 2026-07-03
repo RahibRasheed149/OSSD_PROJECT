@@ -7,6 +7,16 @@ analysis (Worker 2), and the dashboard UI (Manager).
 from flask import Flask, render_template, jsonify
 
 from github_client import get_commits, get_pull_requests, get_user_repos
+from analyzer import (
+    calculate_streak,
+    commits_per_repo,
+    average_pr_merge_time,
+)
+from charts import (
+    prepare_line_chart_data,
+    prepare_repo_distribution_data,
+    prepare_weekday_bar_data,
+)
 from logger import log_error
 from cache import get_cached, set_cached
 
@@ -28,21 +38,25 @@ def dashboard(username):
             repos = get_user_repos(username)
 
             all_commits = []
-            for repo in repos[:5]:  # limit to first 5 repos to stay within rate limits
+            all_prs = []
+            for repo in repos[:5]:  # limit to first 5 repos to respect rate limits
                 commits = get_commits(username, repo["name"])
                 all_commits.extend(commits)
+                prs = get_pull_requests(username, repo["name"])
+                all_prs.extend(prs)
 
-            # TODO: once Worker 2's analyzer.py / charts.py are merged, replace this
-            # block with real calculations instead of placeholder values.
+            repo_counts = commits_per_repo(all_commits)
+            most_active = max(repo_counts, key=repo_counts.get) if repo_counts else "N/A"
+
             data = {
                 "total_commits": len(all_commits),
-                "current_streak": 0,
-                "avg_pr_merge_time": 0,
-                "most_active_repo": repos[0]["name"] if repos else "N/A",
-                "line_chart": {"labels": [], "data": []},
-                "pie_chart": {"labels": [], "data": []},
-                "bar_chart": {"labels": [], "data": []},
-                "recent_activity": [],
+                "current_streak": calculate_streak(all_commits),
+                "avg_pr_merge_time": average_pr_merge_time(all_prs),
+                "most_active_repo": most_active,
+                "line_chart": prepare_line_chart_data(all_commits),
+                "pie_chart": prepare_repo_distribution_data(all_commits),
+                "bar_chart": prepare_weekday_bar_data(all_commits),
+                "recent_activity": [],  # Manager can wire this from all_commits if needed
             }
 
             set_cached(username, data)
@@ -56,7 +70,6 @@ def dashboard(username):
 
 @app.route("/api/refresh/<username>")
 def refresh(username):
-    # Force bypass the cache and re-fetch fresh data
     try:
         repos = get_user_repos(username)
         all_commits = []
