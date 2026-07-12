@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OSS Pulse</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="hero">
+  <div class="hero-content">
+    <p class="eyebrow">// developer productivity, indexed</p>
+    <h1>OSS Pulse</h1>
+    <p>See your commits, streaks, and pull requests turned into a story — powered by your real GitHub activity.</p>
+
+    <form class="prompt-form" onsubmit="return redirectToDashboard(event)">
+      <span class="prefix">analyze</span>
+      <input type="text" id="username" placeholder="github-username" required autocomplete="off">
+      <button type="submit">Run</button>
+    </form>
+  </div>
+</div>
+
+<script>
+function redirectToDashboard(event) {
+  event.preventDefault();
+  const username = document.getElementById("username").value.trim();
+  if (username) window.location.href = `/dashboard/${username}`;
+  return false;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #0B0F14;
+  --surface: #131A22;
+  --surface-2: #1B242E;
+  --border: #1F2933;
+  --text: #E7ECEF;
+  --muted: #7C8894;
+  --mint: #3DDC84;
+  --blue: #5B8DEF;
+  --amber: #F2B84B;
+  --coral: #F2665A;
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+::selection { background: var(--mint); color: #0B0F14; }
+
+/* ---------- Landing page ---------- */
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--surface-2) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.5;
+  mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  text-align: center;
+}
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--mint);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+}
+
+.hero h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.4rem, 6vw, 3.4rem);
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.hero p {
+  color: var(--muted);
+  font-size: 1.05rem;
+  margin: 0 0 2.5rem;
+}
+
+.prompt-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.4rem 0.4rem 0.4rem 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  transition: border-color 0.2s ease;
+}
+
+.prompt-form:focus-within {
+  border-color: var(--mint);
+}
+
+.prompt-form .prefix {
+  color: var(--mint);
+  font-weight: 600;
+  user-select: none;
+}
+
+.prompt-form input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95rem;
+  padding: 0.6rem 0.25rem;
+  outline: none;
+}
+
+.prompt-form input::placeholder { color: var(--muted); }
+
+.prompt-form button {
+  background: var(--mint);
+  color: #0B0F14;
+  border: none;
+  border-radius: 7px;
+  padding: 0.65rem 1.25rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.prompt-form button:hover { background: #4EEFA0; }
+.prompt-form button:active { transform: scale(0.97); }
+.prompt-form button:focus-visible,
+.prompt-form input:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+/* ---------- Dashboard page ---------- */
+
+.dashboard {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.dash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.dash-header .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.dash-header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.9rem;
+  margin: 0.2rem 0 0;
+}
+
+.back-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.75rem;
+  border-radius: 7px;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.back-link:hover { border-color: var(--mint); color: var(--mint); }
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.metric-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.metric-card .chrome {
+  display: flex;
+  gap: 5px;
+  padding: 0.65rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.metric-card .chrome span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.metric-card .chrome span:nth-child(1) { background: var(--coral); }
+.metric-card .chrome span:nth-child(2) { background: var(--amber); }
+.metric-card .chrome span:nth-child(3) { background: var(--mint); }
+
+.metric-card .body { padding: 1rem 1.1rem 1.25rem; }
+
+.metric-card .comment {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.metric-card h2 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--mint);
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.panel .chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.panel .chart-body { padding: 1.25rem; }
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 1rem;
+}
+
+.activity-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.activity-table td {
+  padding: 0.65rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.activity-table tr:last-child td { border-bottom: none; }
+.activity-table .msg { color: var(--text); }
+.activity-table .repo { color: var(--blue); font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; }
+.activity-table .time { color: var(--muted); text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+
+.empty-state {
+  padding: 2.5rem 1.25rem;
+  text-align: center;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 720px) {
+  .metric-grid { grid-template-columns: repeat(2, 1fr); }
+  .chart-row { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
