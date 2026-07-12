@@ -4,6 +4,8 @@ Flask entry point. Wires together data collection (Worker 1),
 analysis (Worker 2), and the dashboard UI (Manager).
 """
 
+from datetime import datetime
+
 from flask import Flask, render_template, jsonify
 
 from github_client import get_commits, get_pull_requests, get_user_repos
@@ -21,6 +23,33 @@ from logger import log_error
 from cache import get_cached, set_cached
 
 app = Flask(__name__)
+
+
+def build_recent_activity(commits, limit=5):
+    """Build a simple recent-activity list from the most recent commits."""
+    sorted_commits = sorted(
+        [c for c in commits if c.date is not None],
+        key=lambda c: c.date,
+        reverse=True
+    )
+
+    activity = []
+    for c in sorted_commits[:limit]:
+        days_ago = (datetime.now() - c.date).days
+        if days_ago == 0:
+            time_ago = "today"
+        elif days_ago == 1:
+            time_ago = "1 day ago"
+        else:
+            time_ago = f"{days_ago} days ago"
+
+        activity.append({
+            "message": c.message.split("\n")[0][:60],  # first line, trimmed
+            "repo": c.repo,
+            "time_ago": time_ago,
+        })
+
+    return activity
 
 
 @app.route("/")
@@ -56,7 +85,7 @@ def dashboard(username):
                 "line_chart": prepare_line_chart_data(all_commits),
                 "pie_chart": prepare_repo_distribution_data(all_commits),
                 "bar_chart": prepare_weekday_bar_data(all_commits),
-                "recent_activity": [],  # Manager can wire this from all_commits if needed
+                "recent_activity": build_recent_activity(all_commits),
             }
 
             set_cached(username, data)
