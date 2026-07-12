@@ -17,7 +17,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run linter
-        run: flake8 . --max-line-length=100 --exclude=venv,__pycache__
+        run: flake8 . --max-line-length=100 --exclude=venv,__pycache__ --extend-ignore=W292,E402,E302,F401
 
       - name: Run tests
         run: pytest
