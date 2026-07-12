@@ -8,7 +8,7 @@
 
 OSS Pulse is a Flask web dashboard that turns your GitHub activity into real insight — commit streaks, PR turnaround time, weekday activity patterns, and repo distribution — pulled live from the GitHub REST API and analyzed with pandas.
 
-Built as a semester project for **CS356 — Open Source Software Development** at the University of Management and Technology, Lahore, demonstrating a full open-source development workflow: Git branching, Pull Requests, code review, automated testing, and CI/CD — not just a script that runs once.
+Built as a semester project for **Open Source Software Development** at the University of Management and Technology, Lahore, demonstrating a full open-source development workflow: Git branching, Pull Requests, code review, automated testing, and CI/CD — not just a script that runs once.
 
 ---
 
@@ -129,7 +129,7 @@ OSSD_PROJECT/
 
 ## Team
 
-Built by a 4-person team for CS356, Spring 2026:
+Built by a 4-person team for Open source Software Development:
 
 | Role | Responsibilities |
 |---|---|
