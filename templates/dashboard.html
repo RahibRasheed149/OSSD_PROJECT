@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard — {{ username }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="dashboard">
+
+  <div class="dash-header">
+    <div>
+      <span class="label">// activity report</span>
+      <h1>{{ username }}</h1>
+    </div>
+    <a class="back-link" href="/">&larr; new search</a>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="chrome"><span></span><span></span><span></span></div>
+      <div class="body">
+        <span class="comment">// total commits</span>
+        <h2>{{ data.total_commits }}</h2>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="chrome"><span></span><span></span><span></span></div>
+      <div class="body">
+        <span class="comment">// current streak</span>
+        <h2>{{ data.current_streak }}d</h2>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="chrome"><span></span><span></span><span></span></div>
+      <div class="body">
+        <span class="comment">// avg pr merge time</span>
+        <h2>{{ data.avg_pr_merge_time }}d</h2>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="chrome"><span></span><span></span><span></span></div>
+      <div class="body">
+        <span class="comment">// most active repo</span>
+        <h2 style="font-size:1.15rem;">{{ data.most_active_repo }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-row">
+    <div class="panel">
+      <div class="chrome"><span>commit_activity.log</span></div>
+      <div class="chart-body"><canvas id="lineChart"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="chrome"><span>repo_split.log</span></div>
+      <div class="chart-body"><canvas id="pieChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="chrome"><span>weekly_rhythm.log</span></div>
+    <div class="chart-body"><canvas id="barChart"></canvas></div>
+  </div>
+
+  <div class="panel">
+    <div class="chrome"><span>recent_activity.log</span></div>
+    {% if data.recent_activity %}
+    <table class="activity-table">
+      {% for item in data.recent_activity %}
+      <tr>
+        <td class="msg">{{ item.message }}</td>
+        <td class="repo">{{ item.repo }}</td>
+        <td class="time">{{ item.time_ago }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <div class="empty-state">no activity indexed yet</div>
+    {% endif %}
+  </div>
+
+</div>
+
+<script>
+const lineData = {{ data.line_chart | tojson }};
+const pieData = {{ data.pie_chart | tojson }};
+const barData = {{ data.bar_chart | tojson }};
+
+Chart.defaults.color = '#7C8894';
+Chart.defaults.borderColor = '#1F2933';
+Chart.defaults.font.family = "'JetBrains Mono', monospace";
+
+new Chart(document.getElementById('lineChart'), {
+  type: 'line',
+  data: { labels: lineData.labels, datasets: [{ data: lineData.data, borderColor: '#3DDC84', backgroundColor: 'rgba(61,220,132,0.08)', fill: true, tension: 0.3, pointRadius: 0 }] },
+  options: { plugins: { legend: { display: false } } }
+});
+
+new Chart(document.getElementById('pieChart'), {
+  type: 'doughnut',
+  data: { labels: pieData.labels, datasets: [{ data: pieData.data, backgroundColor: ['#3DDC84', '#5B8DEF', '#F2B84B', '#F2665A'], borderColor: '#131A22', borderWidth: 2 }] },
+  options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } } }
+});
+
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: { labels: barData.labels, datasets: [{ data: barData.data, backgroundColor: '#5B8DEF', borderRadius: 4, maxBarThickness: 36 }] },
+  options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+});
+</script>
+</body>
+</html>
