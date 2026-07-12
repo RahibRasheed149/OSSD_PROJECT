@@ -23,7 +23,6 @@ Built as a semester project for **CS356 — Open Source Software Development** a
 - ⚡ **Local caching** — avoids hitting GitHub's API rate limit on repeated dashboard loads
 - ✅ **Automated CI/CD** — every push and PR runs linting and tests via GitHub Actions
 
-
 ## Architecture
 
 GitHub REST API + Trending page
